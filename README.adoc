@@ -201,6 +201,7 @@ See link:formdb.scm[formdb.scm] for structured open questions with acceptance cr
 * https://github.com/hyperpolymath/formdb-studio[FormDB Studio] - Zero-friction GUI for non-technical users
 * https://github.com/hyperpolymath/bofig[BoFIG] - Evidence graph for investigative journalism
 * https://github.com/hyperpolymath/zotero-formdb[Zotero-FormDB] - Post-truth reference manager with PROMPT scores
+* https://github.com/hyperpolymath/formdb-debugger[FormDB Debugger] - Proof-carrying database debugger (Lean 4 + Idris 2)
 
 == License
 
