@@ -4,7 +4,7 @@
 
 (state
   (metadata
-    (version "0.0.4")
+    (version "0.0.5")
     (schema-version "1.0")
     (created "2026-01-03")
     (updated "2026-01-12")
@@ -48,7 +48,9 @@
       (api-openapi 100 "OpenAPI 3.1 specification complete")
       (api-protobuf 100 "Protocol Buffer definitions complete")
       (api-graphql 100 "GraphQL SDL schema complete")
-      (api-server 95 "Zig HTTP server with Form.Bridge FFI wiring"))
+      (api-server 100 "Zig HTTP server with Form.Bridge FFI complete")
+      (api-websocket 100 "WebSocket for GraphQL subscriptions complete")
+      (api-integration-tests 100 "Integration tests for all protocols complete"))
     (working-features
       "Block read/write with CRC32C"
       "Append-only journal with sequence numbers"
@@ -72,7 +74,11 @@
       "GraphQL API with SDL schema"
       "Prometheus metrics endpoint"
       "JWT and API key authentication"
-      "REST handlers wired to Form.Bridge FFI"))
+      "REST handlers wired to Form.Bridge FFI"
+      "gRPC handlers with full protobuf serialization"
+      "WebSocket support for GraphQL subscriptions"
+      "graphql-ws protocol implementation"
+      "Integration tests for all API protocols"))
 
   (route-to-mvp
     (milestones
@@ -83,7 +89,7 @@
       (m8 "Form.Runtime (FQL Engine)" 100 "v0.0.4" "2026-01-12")
       (m9 "Form.Normalizer" 100 "v0.0.4" "2026-01-12")
       (m10 "Production Hardening" 100 "v0.0.4" "2026-01-12")
-      (m11 "Multi-Protocol API Server" 95 "v0.0.5" "in-progress")))
+      (m11 "Multi-Protocol API Server" 100 "v0.0.5" "2026-01-12")))
 
   (blockers-and-issues
     (critical)
@@ -108,17 +114,32 @@
 
   (critical-next-actions
     (immediate
-      "Complete gRPC protobuf serialization"
-      "Integration test API with real queries")
-    (this-week
-      "Add WebSocket support for GraphQL subscriptions"
-      "Tag and release v0.0.5")
-    (this-month
       "Begin M12 language bindings (ReScript)"
+      "Create client SDK generator")
+    (this-week
+      "ReScript client library"
       "PHP client library"
-      "Performance optimization"))
+      "TypeScript types generation")
+    (this-month
+      "Performance optimization"
+      "Clustering preparation (Form.ControlPlane)"
+      "Path to 1.0.0 planning"))
 
   (session-history
+    (session
+      (date "2026-01-12")
+      (name "m11-complete-v0.0.5")
+      (accomplishments
+        "Completed gRPC protobuf encoder/decoder implementation"
+        "All gRPC handlers wired to Form.Bridge FFI"
+        "Created websocket.zig for GraphQL subscriptions"
+        "WebSocket upgrade, frame encoding, graphql-ws protocol"
+        "Integrated WebSocket into GraphQL handler"
+        "Created comprehensive integration tests"
+        "Updated CHANGELOG for v0.0.5"
+        "Updated STATE.scm to M11 100% completion"
+        "Created UNIFIED-ROADMAP.scm for ecosystem coordination"
+        "Tagged and released v0.0.5"))
     (session
       (date "2026-01-12")
       (name "m11-bridge-wiring")

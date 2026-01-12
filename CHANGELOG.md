@@ -9,6 +9,75 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.5] - 2026-01-12
+
+Multi-Protocol API Server milestone: **M11 Complete**
+
+This release completes Milestone M11, delivering a production-ready multi-protocol API server with full Form.Bridge FFI integration.
+
+### Added
+
+#### Multi-Protocol API Server
+- **REST API** (`api/src/rest.zig`)
+  - OpenAPI 3.1 specification compliance
+  - Full CRUD endpoints for collections, documents, and queries
+  - Health and metrics endpoints
+  - Wired to Form.Bridge FFI for real database operations
+
+- **gRPC API** (`api/src/grpc.zig`)
+  - Protocol Buffer serialization/deserialization
+  - Full protobuf encoder with varint, tag/wire type handling
+  - Protobuf decoder for message parsing
+  - All service methods wired to Form.Bridge FFI
+  - Support for Query, ListCollections, GetCollection, CreateCollection
+  - Support for GetJournal, DiscoverDependencies, AnalyzeNormalForm
+  - Migration operations (StartMigration, GetMigrationStatus)
+
+- **GraphQL API** (`api/src/graphql.zig`)
+  - GraphQL SDL schema with full type system
+  - Query, Mutation, and Subscription support
+  - GraphiQL UI for exploration
+  - Introspection support
+  - WebSocket integration for subscriptions
+
+- **WebSocket Support** (`api/src/websocket.zig`)
+  - RFC 6455 compliant WebSocket implementation
+  - WebSocket upgrade handling with SHA-1 accept key
+  - Frame encoding/decoding (text, binary, ping, pong, close)
+  - graphql-ws protocol for GraphQL subscriptions
+  - Subscription management with connection state
+  - Journal streaming subscription type
+
+- **Form.Bridge Integration** (`api/src/bridge_client.zig`)
+  - FFI bindings to core FormDB engine
+  - CBOR encoding for all operations
+  - Graceful degraded mode when bridge unavailable
+  - Health check, query execution, collection management
+
+#### Integration Tests (`api/src/integration_tests.zig`)
+- REST API endpoint tests
+- gRPC protobuf encoder/decoder tests
+- gRPC frame encoding tests
+- GraphQL request parsing tests
+- WebSocket accept key computation tests (RFC 6455 compliance)
+- WebSocket frame encoding tests
+- WebSocket subscription message tests
+- Bridge client integration tests
+
+#### Ecosystem Coordination
+- **UNIFIED-ROADMAP.scm** - Cross-repo roadmap for MVP 1.0.0
+  - Dependency graph for FormDB, FQLdt, Studio, Debugger
+  - Critical path phases P1-P3
+  - Post-MVP roadmap (1.1.0, 1.2.0, 2.0.0)
+  - Success metrics and quality gates
+
+### Changed
+- Updated STATE.scm to M11 100% completion
+- All API handlers now use Form.Bridge FFI instead of mock responses
+- Build configuration includes all new modules in test suite
+
+---
+
 ## [0.0.4] - 2026-01-12
 
 MVP Completion milestone: **Form.Runtime + Form.Normalizer Complete**
@@ -298,6 +367,8 @@ Initial release: **Repository Initialization**
 
 | Version | Date | Milestone | Key Features |
 |---------|------|-----------|--------------|
+| 0.0.5 | 2026-01-12 | M11 Complete | Multi-protocol API server, WebSocket subscriptions |
+| 0.0.4 | 2026-01-12 | M8-M10 Complete | Query engine, normalizer, production hardening |
 | 0.0.3 | 2026-01-12 | M7 Complete | Complete documentation suite, PMPL-1.0 license |
 | 0.0.2 | 2026-01-11 | M1-M6 Complete | Full specs, Forth PoC, documentation |
 | 0.0.1 | 2026-01-03 | Repository Init | Structure, licensing, CI/CD |
@@ -320,7 +391,9 @@ FormDB is in pre-1.0 development. APIs, formats, and interfaces may change witho
 
 ## Links
 
-[Unreleased]: https://github.com/hyperpolymath/formdb/compare/v0.0.3...HEAD
+[Unreleased]: https://github.com/hyperpolymath/formdb/compare/v0.0.5...HEAD
+[0.0.5]: https://github.com/hyperpolymath/formdb/compare/v0.0.4...v0.0.5
+[0.0.4]: https://github.com/hyperpolymath/formdb/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/hyperpolymath/formdb/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/hyperpolymath/formdb/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/hyperpolymath/formdb/releases/tag/v0.0.1

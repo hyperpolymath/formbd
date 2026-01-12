@@ -53,6 +53,8 @@ pub fn build(b: *std.Build) void {
         "src/metrics.zig",
         "src/auth.zig",
         "src/bridge_client.zig",
+        "src/websocket.zig",
+        "src/integration_tests.zig",
     };
 
     for (modules) |mod| {
