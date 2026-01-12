@@ -9,6 +9,58 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.9] - 2026-01-12
+
+Performance Optimization milestone: **M15 Complete**
+
+This release completes Milestone M15, delivering production-ready performance features.
+
+### Added
+
+#### Query Plan Cache (`perf/src/FormDB_Perf_Cache.res`)
+- LRU cache with TTL-based expiration
+- Configurable max size and TTL
+- Cache hit/miss statistics
+- Thread-safe entry management
+- Automatic stale entry cleanup
+
+#### Connection Pool (`perf/src/FormDB_Perf_Pool.res`)
+- Connection pooling with min/max sizing
+- Idle timeout and automatic cleanup
+- Acquire timeout with waiting queue
+- Pool statistics (total, idle, in-use, waiting)
+- Connection health management
+
+#### Batch Operations (`perf/src/FormDB_Perf_Batch.res`)
+- Batch insert, update, delete operations
+- Configurable batch size and flush intervals
+- Retry on failure with max retries
+- Auto-flush when batch size limit reached
+- Error tracking per operation
+
+#### Performance Metrics (`perf/src/FormDB_Perf_Metrics.res`)
+- Prometheus-compatible metric export
+- Counter and Gauge metric types
+- Timer context for latency measurement
+- Pre-defined metrics:
+  - `formdb_query_total` - Total queries executed
+  - `formdb_query_latency_ms` - Last query latency
+  - `formdb_cache_hits_total` / `formdb_cache_misses_total`
+  - `formdb_connection_pool_size` / `formdb_active_connections`
+  - `formdb_batch_size` / `formdb_errors_total`
+
+#### Documentation
+- `perf/README.md` - Comprehensive performance module documentation
+- Best practices for caching, pooling, batching, and monitoring
+- Configuration reference for all modules
+
+### Changed
+
+- STATE.scm updated to M15 100% completion
+- Added performance module to working-features
+
+---
+
 ## [0.0.8] - 2026-01-12
 
 Testing & Verification milestone: **M14 Complete**
@@ -556,6 +608,7 @@ Initial release: **Repository Initialization**
 
 | Version | Date | Milestone | Key Features |
 |---------|------|-----------|--------------|
+| 0.0.9 | 2026-01-12 | M15 Complete | Query cache, connection pool, batch ops, metrics |
 | 0.0.8 | 2026-01-12 | M14 Complete | Property tests, fuzz testing, integration tests, E2E tests |
 | 0.0.7 | 2026-01-12 | M13 Complete | Strapi, Directus, Ghost, Payload CMS integrations |
 | 0.0.6 | 2026-01-12 | M12 Complete | ReScript client, PHP client, SDK generator |
@@ -583,7 +636,8 @@ FormDB is in pre-1.0 development. APIs, formats, and interfaces may change witho
 
 ## Links
 
-[Unreleased]: https://github.com/hyperpolymath/formdb/compare/v0.0.8...HEAD
+[Unreleased]: https://github.com/hyperpolymath/formdb/compare/v0.0.9...HEAD
+[0.0.9]: https://github.com/hyperpolymath/formdb/compare/v0.0.8...v0.0.9
 [0.0.8]: https://github.com/hyperpolymath/formdb/compare/v0.0.7...v0.0.8
 [0.0.7]: https://github.com/hyperpolymath/formdb/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/hyperpolymath/formdb/compare/v0.0.5...v0.0.6
