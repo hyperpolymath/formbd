@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+---
+
+## [0.0.3] - 2026-01-12
+
+Documentation milestone release: **Complete Documentation Suite**
+
+This release completes Milestone M7, providing comprehensive documentation for production deployment and integration.
+
 ### Added
 - Comprehensive QUICKSTART.adoc tutorial (15-minute guide with full examples)
 - Complete VERSIONING.adoc stability policy document
@@ -167,10 +175,15 @@ Initial release: **Repository Initialization**
 
 | Version | Date | Milestone | Key Features |
 |---------|------|-----------|--------------|
+| 0.0.3 | 2026-01-12 | M7 Complete | Complete documentation suite, PMPL-1.0 license |
 | 0.0.2 | 2026-01-11 | M1-M6 Complete | Full specs, Forth PoC, documentation |
 | 0.0.1 | 2026-01-03 | Repository Init | Structure, licensing, CI/CD |
 
 ## Upgrade Notes
+
+### Upgrading to 0.0.3
+
+No breaking changes from 0.0.2. This release adds comprehensive documentation and changes the license to PMPL-1.0.
 
 ### Upgrading to 0.0.2
 
@@ -184,7 +197,8 @@ FormDB is in pre-1.0 development. APIs, formats, and interfaces may change witho
 
 ## Links
 
-[Unreleased]: https://github.com/hyperpolymath/formdb/compare/v0.0.2...HEAD
+[Unreleased]: https://github.com/hyperpolymath/formdb/compare/v0.0.3...HEAD
+[0.0.3]: https://github.com/hyperpolymath/formdb/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/hyperpolymath/formdb/compare/v0.0.1...v0.0.2
 [0.0.1]: https://github.com/hyperpolymath/formdb/releases/tag/v0.0.1
 
