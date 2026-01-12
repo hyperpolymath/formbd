@@ -3,10 +3,10 @@
 
 (state
   (metadata
-    (version "0.0.3")
+    (version "0.0.7")
     (schema-version "1.0")
     (created "2026-01-03")
-    (updated "2026-01-13")
+    (updated "2026-01-12")
     (project "formdb")
     (repo "github.com/hyperpolymath/formdb"))
 
@@ -44,7 +44,11 @@
       "CBOR encoding (core-zig/src/cbor.zig)"
       "FDQL parser (core-factor/fdql/fdql.factor)"
       "FD discovery scaffolding (normalizer/factor/fd-discovery.factor)"
-      "Lean 4 FD types (normalizer/lean/FunDep.lean)"))
+      "Lean 4 FD types (normalizer/lean/FunDep.lean)"
+      "Strapi plugin (integrations/strapi/)"
+      "Directus hook extension (integrations/directus/)"
+      "Ghost webhook server (integrations/ghost/)"
+      "Payload CMS adapter (integrations/payload/)"))
 
   (route-to-mvp
     (milestone (id "M1") (name "Specification Complete")
@@ -97,7 +101,15 @@
         (item "Narrative templates" (status "pending"))
         (item "DenormalizationStep type in Lean 4" (status "pending"))
         (item "Proof verification FFI in Form.Bridge" (status "pending"))
-        (item "Three-phase migration implementation" (status "pending")))))
+        (item "Three-phase migration implementation" (status "pending"))))
+    (milestone (id "M13") (name "CMS Integrations")
+      (status "complete")
+      (items
+        (item "Strapi plugin" (status "complete"))
+        (item "Directus hook extension" (status "complete"))
+        (item "Ghost webhook server" (status "complete"))
+        (item "Payload CMS adapter" (status "complete"))
+        (item "Integration documentation" (status "complete")))))
 
   (blockers-and-issues
     (critical)
@@ -107,16 +119,16 @@
 
   (critical-next-actions
     (immediate
-      "Complete Form.Runtime query planner"
-      "Implement Form.Runtime executor")
+      "Build integration test suite for CMS plugins"
+      "Add E2E tests for sync scenarios")
     (this-week
-      "Implement DFD algorithm in fd-discovery.factor"
-      "Add proof verification FFI to Form.Bridge"
-      "Add DenormalizationStep type to FunDep.lean")
+      "M14: Testing & Verification framework"
+      "Property-based tests for FDQL"
+      "Fuzz testing for parser")
     (this-month
-      "Complete Form.Runtime PoC (M5 full completion)"
-      "Implement DISCOVER DEPENDENCIES command"
-      "Implement three-phase migration framework"))
+      "Complete M14 (Testing & Verification)"
+      "Prepare for v0.0.8 release"
+      "Begin M15 planning"))
 
   (unified-roadmap
     (reference "UNIFIED-ROADMAP.scm")
@@ -187,4 +199,15 @@
         "All 6 open design questions now have documented decisions"
         "Form.Normalizer advanced from 'scaffolded' to 'design-complete' status"
         "Overall project completion: 65% -> 70%"
-        "No remaining design blockers - ready for implementation"))))
+        "No remaining design blockers - ready for implementation"))
+    (snapshot (date "2026-01-12") (session "cms-integrations")
+      (accomplishments
+        "Created integrations/ directory structure"
+        "Built Strapi v4/v5 plugin with ReScript"
+        "Built Directus hook extension"
+        "Built Ghost webhook server (Deno runtime)"
+        "Built Payload CMS adapter"
+        "All integrations support bidirectional, cms-to-formdb, formdb-to-cms sync modes"
+        "All integrations include provenance metadata for audit trails"
+        "Comprehensive integration documentation"
+        "Milestone M13 (CMS Integrations) complete"))))

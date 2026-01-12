@@ -9,6 +9,83 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.7] - 2026-01-12
+
+CMS Integrations milestone: **M13 Complete**
+
+This release completes Milestone M13, delivering official CMS integration plugins for popular headless CMS platforms.
+
+### Added
+
+#### CMS Integrations (`integrations/`)
+
+- **Strapi Plugin** (`integrations/strapi/`)
+  - Strapi v4/v5 plugin written in ReScript
+  - Real-time content sync to FormDB
+  - Lifecycle hooks: afterCreate, afterUpdate, afterDelete
+  - Collection mapping with configurable sync modes
+  - Field exclusion support for sensitive data
+  - Provenance metadata for audit trails
+  - Types: StrapiContext, ContentTypeConfig, SyncMode
+
+- **Directus Extension** (`integrations/directus/`)
+  - Hook extension for Directus CMS
+  - Action handlers for items.create, items.update, items.delete
+  - Environment-based configuration
+  - Selective collection sync via FORMDB_SYNC_COLLECTIONS
+  - FormDB client with FDQL query execution
+
+- **Ghost Integration** (`integrations/ghost/`)
+  - Webhook server for Ghost CMS (Deno runtime)
+  - Event types: post.published, post.updated, post.deleted
+  - Page and member events support
+  - HMAC signature verification
+  - Configurable collection mappings
+  - Docker deployment support
+
+- **Payload CMS Adapter** (`integrations/payload/`)
+  - Plugin for Payload CMS
+  - Collection hooks: afterChange, afterDelete
+  - Field exclusion configuration
+  - Localized field support (nested locale objects)
+  - TypeScript type definitions included
+
+#### Sync Modes (All Integrations)
+
+| Mode | Description |
+|------|-------------|
+| `bidirectional` | Sync changes both ways |
+| `cms-to-formdb` | Only sync CMS changes to FormDB |
+| `formdb-to-cms` | Only sync FormDB changes to CMS |
+
+#### Provenance Tracking
+
+All integrations add provenance metadata to FormDB:
+```json
+{
+  "actor": "strapi-plugin",
+  "rationale": "Auto-sync from Strapi create event",
+  "source": "strapi",
+  "model": "article",
+  "action": "create",
+  "timestamp": "2026-01-12T10:30:00Z"
+}
+```
+
+#### Documentation
+
+- `integrations/README.md` - Comprehensive integration overview
+- Quick start examples for all four CMS platforms
+- Environment variable reference
+- Architecture diagram
+
+### Changed
+
+- STATE.scm updated to M13 100% completion
+- Added CMS integration components to working-features
+
+---
+
 ## [0.0.6] - 2026-01-12
 
 Language Bindings milestone: **M12 Complete**
@@ -434,6 +511,7 @@ Initial release: **Repository Initialization**
 
 | Version | Date | Milestone | Key Features |
 |---------|------|-----------|--------------|
+| 0.0.7 | 2026-01-12 | M13 Complete | Strapi, Directus, Ghost, Payload CMS integrations |
 | 0.0.6 | 2026-01-12 | M12 Complete | ReScript client, PHP client, SDK generator |
 | 0.0.5 | 2026-01-12 | M11 Complete | Multi-protocol API server, WebSocket subscriptions |
 | 0.0.4 | 2026-01-12 | M8-M10 Complete | Query engine, normalizer, production hardening |
@@ -459,7 +537,8 @@ FormDB is in pre-1.0 development. APIs, formats, and interfaces may change witho
 
 ## Links
 
-[Unreleased]: https://github.com/hyperpolymath/formdb/compare/v0.0.6...HEAD
+[Unreleased]: https://github.com/hyperpolymath/formdb/compare/v0.0.7...HEAD
+[0.0.7]: https://github.com/hyperpolymath/formdb/compare/v0.0.6...v0.0.7
 [0.0.6]: https://github.com/hyperpolymath/formdb/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/hyperpolymath/formdb/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/hyperpolymath/formdb/compare/v0.0.3...v0.0.4
