@@ -20,7 +20,7 @@
       (future "Gleam" "Elixir/OTP")))
 
   (current-position
-    (phase "MVP Complete - Ready for M11")
+    (phase "M11: Multi-Protocol API Server")
     (overall-completion 100)
     (components
       (spec-fql 100 "FQL language specification complete")
@@ -44,7 +44,11 @@
       (lean4-proofs 100 "Proof-carrying transformations complete")
       (seam-tests 100 "End-to-end pipeline tests complete")
       (benchmarks 100 "Performance benchmarks complete")
-      (migration-tests 100 "Migration framework tests complete"))
+      (migration-tests 100 "Migration framework tests complete")
+      (api-openapi 100 "OpenAPI 3.1 specification complete")
+      (api-protobuf 100 "Protocol Buffer definitions complete")
+      (api-graphql 100 "GraphQL SDL schema complete")
+      (api-server 80 "Zig HTTP server with REST/gRPC/GraphQL handlers"))
     (working-features
       "Block read/write with CRC32C"
       "Append-only journal with sequence numbers"
@@ -62,7 +66,12 @@
       "Proof verification FFI with registered verifiers"
       "Lean4 proof-carrying transformations"
       "End-to-end seam tests"
-      "Performance benchmark suite"))
+      "Performance benchmark suite"
+      "REST API with OpenAPI 3.1 spec"
+      "gRPC API with Protocol Buffers"
+      "GraphQL API with SDL schema"
+      "Prometheus metrics endpoint"
+      "JWT and API key authentication"))
 
   (route-to-mvp
     (milestones
@@ -72,7 +81,8 @@
       (m7 "Complete Documentation Suite" 100 "v0.0.3" "2026-01-12")
       (m8 "Form.Runtime (FQL Engine)" 100 "v0.0.4" "2026-01-12")
       (m9 "Form.Normalizer" 100 "v0.0.4" "2026-01-12")
-      (m10 "Production Hardening" 100 "v0.0.4" "2026-01-12")))
+      (m10 "Production Hardening" 100 "v0.0.4" "2026-01-12")
+      (m11 "Multi-Protocol API Server" 80 "v0.0.5" "in-progress")))
 
   (blockers-and-issues
     (critical)
@@ -98,18 +108,31 @@
 
   (critical-next-actions
     (immediate
-      "Begin M11: HTTP API Server design"
-      "Create OpenAPI specification")
+      "Wire REST handlers to Form.Bridge FFI"
+      "Complete gRPC protobuf serialization")
     (this-week
-      "Implement formdb-server binary"
-      "Add REST endpoints for FQL operations"
-      "Add authentication middleware")
+      "Integration test API with real queries"
+      "Add WebSocket support for GraphQL subscriptions"
+      "Tag and release v0.0.5")
     (this-month
-      "Complete M11 HTTP API"
       "Begin M12 language bindings (ReScript)")
-      "Performance optimization based on benchmark results"))
+      "PHP client library"
+      "Performance optimization"))
 
   (session-history
+    (session
+      (date "2026-01-12")
+      (name "m11-api-server")
+      (accomplishments
+        "Created multi-protocol API server structure"
+        "OpenAPI 3.1 specification (spec/openapi.yaml)"
+        "Protocol Buffers for gRPC (proto/formdb.proto)"
+        "GraphQL SDL schema (graphql/schema.graphql)"
+        "Zig HTTP server with REST/gRPC/GraphQL routing"
+        "Prometheus metrics endpoint"
+        "JWT and API key authentication"
+        "GraphiQL UI for GraphQL exploration"
+        "Updated ROADMAP with expanded M11 scope"))
     (session
       (date "2026-01-12")
       (name "mvp-release-final")

@@ -190,41 +190,84 @@ See link:spec/self-normalizing.adoc[Self-Normalizing Specification] for full det
 * ✅ EXPLAIN correlation tests
 * ✅ Large dataset stress tests
 
-== Phase 9: HTTP API Server
+== Phase 9: Multi-Protocol API Server
 
-*Status*: 📋 Planned
+*Status*: 🚧 In Progress
 
-*Goal*: RESTful HTTP server exposing FormDB operations for language-agnostic access.
+*Goal*: Production API server with REST, gRPC, and GraphQL interfaces.
 
-*Dependencies*: Phase 6 (Form.Runtime) must be complete.
+*Dependencies*: Phase 8 (Production Hardening) complete.
 
 === Deliverables
 
-* [ ] HTTP server binary (`formdb-server`)
-* [ ] REST API endpoints for all FQL operations
-* [ ] JSON request/response format
-* [ ] Authentication middleware (JWT, API keys)
-* [ ] OpenAPI/Swagger specification
-* [ ] Health check and metrics endpoints
+* [ ] API server binary (`formdb-server`) in Zig
+* [ ] REST API with OpenAPI 3.1 specification
+* [ ] gRPC API with Protocol Buffers definitions
+* [ ] GraphQL API with SDL schema
+* [ ] Authentication middleware (JWT, API keys, mTLS)
+* [ ] Health check, metrics, and observability endpoints
 
-=== API Design
+=== REST API Design
 
 [source]
 ----
-POST /v1/query          # Execute FQL query
-POST /v1/collections    # Create collection
-GET  /v1/collections    # List collections
-GET  /v1/journal        # Query journal entries
-GET  /v1/health         # Health check
-GET  /v1/metrics        # Prometheus metrics
+POST   /v1/query              # Execute FDQL query
+POST   /v1/collections        # Create collection
+GET    /v1/collections        # List collections
+GET    /v1/collections/{name} # Get collection schema
+DELETE /v1/collections/{name} # Drop collection
+GET    /v1/journal            # Query journal entries
+POST   /v1/normalize/discover # Discover FDs
+POST   /v1/normalize/analyze  # Analyze normal form
+POST   /v1/migrate/start      # Start migration
+POST   /v1/migrate/commit     # Commit migration
+GET    /v1/health             # Health check
+GET    /v1/metrics            # Prometheus metrics
+----
+
+=== gRPC Service Definition
+
+[source,protobuf]
+----
+service FormDB {
+  rpc Query(QueryRequest) returns (QueryResponse);
+  rpc CreateCollection(CreateCollectionRequest) returns (CreateCollectionResponse);
+  rpc ListCollections(Empty) returns (ListCollectionsResponse);
+  rpc GetJournal(JournalRequest) returns (stream JournalEntry);
+  rpc DiscoverDependencies(DiscoverRequest) returns (DiscoverResponse);
+  rpc StartMigration(MigrationRequest) returns (MigrationResponse);
+}
+----
+
+=== GraphQL Schema
+
+[source,graphql]
+----
+type Query {
+  collections: [Collection!]!
+  collection(name: String!): Collection
+  journal(since: Int, limit: Int): [JournalEntry!]!
+  query(fdql: String!, provenance: ProvenanceInput): QueryResult!
+}
+
+type Mutation {
+  createCollection(name: String!, schema: SchemaInput!): Collection!
+  execute(fdql: String!, provenance: ProvenanceInput!): MutationResult!
+  startMigration(collection: String!, target: NormalForm!): Migration!
+}
+
+type Subscription {
+  journalStream(collection: String): JournalEntry!
+}
 ----
 
 === Acceptance Criteria
 
-* All FQL operations accessible via HTTP
-* Provenance passed via headers or request body
-* JSON responses include journal sequence numbers
-* OpenAPI spec generates valid clients
+* All FDQL operations accessible via REST, gRPC, and GraphQL
+* Provenance tracking across all protocols
+* Streaming support for journal and large result sets
+* OpenAPI, protobuf, and GraphQL SDL specs generate valid clients
+* Prometheus metrics and OpenTelemetry tracing
 
 == Phase 10: Language Bindings
 
