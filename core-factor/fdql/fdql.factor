@@ -61,27 +61,38 @@ TUPLE: binary-expr left op right ;
 
 ERROR: fdql-parse-error message position ;
 
-: expect-token ( tokens expected -- tokens' )
-    swap unclip-slice
-    pick >upper = [ drop ] [
-        "Expected '" "'" surround fdql-parse-error
-    ] if ;
-
 : peek-token ( tokens -- token/f )
-    [ first ] [ drop f ] if-empty ;
+    dup empty? [ drop f ] [ first ] if ;
 
 : consume-token ( tokens -- tokens' token )
     unclip-slice ;  ! Returns ( rest first ) = ( tokens' token ), token on top
 
+: expect-token ( tokens expected -- tokens' )
+    over peek-token              ! ( tokens expected token )
+    swap >upper swap >upper      ! ( tokens EXPECTED TOKEN )
+    over = [                     ! ( tokens EXPECTED ) if match
+        drop consume-token drop  ! ( tokens' )
+    ] [
+        "Expected '" "'" surround fdql-parse-error
+    ] if ;
+
 : try-consume ( tokens expected -- tokens' matched? )
-    over peek-token dup [
-        >upper = [
-            swap unclip-slice drop t
+    over peek-token                  ! ( tokens expected actual/f )
+    dup [
+        ! Have a token - check if it matches
+        swap >upper swap >upper      ! ( tokens EXPECTED ACTUAL )
+        over over =                  ! ( tokens EXPECTED ACTUAL match? )
+        [
+            2drop                    ! ( tokens )
+            unclip-slice drop        ! ( tokens' )
+            t                        ! ( tokens' t )
         ] [
-            drop f
+            2drop                    ! ( tokens )
+            f                        ! ( tokens f )
         ] if
     ] [
-        2drop f
+        ! No token
+        drop drop f                  ! ( tokens f )
     ] if ;
 
 ! ============================================================
@@ -153,12 +164,12 @@ ERROR: fdql-parse-error message position ;
     ] if ;
 
 :: parse-edge-clause ( tokens -- tokens' edge/f )
-    "TRAVERSE" tokens try-consume :> ( tokens' matched? )
+    tokens "TRAVERSE" try-consume :> ( tokens' matched? )
     matched? [
         tokens' parse-identifier :> ( tokens'' edge-type )
         tokens'' consume-token :> ( tokens''' dir-raw )
         dir-raw >upper :> direction
-        "DEPTH" tokens''' try-consume :> ( tokens'''' has-depth? )
+        tokens''' "DEPTH" try-consume :> ( tokens'''' has-depth? )
         has-depth? [
             tokens'''' consume-token string>number :> ( tokens''''' depth )
             tokens'''''
@@ -172,10 +183,10 @@ ERROR: fdql-parse-error message position ;
     ] if ;
 
 :: parse-limit-clause ( tokens -- tokens' limit/f )
-    "LIMIT" tokens try-consume :> ( tokens' matched? )
+    tokens "LIMIT" try-consume :> ( tokens' matched? )
     matched? [
         tokens' consume-token string>number :> ( tokens'' limit )
-        "OFFSET" tokens'' try-consume :> ( tokens''' has-offset? )
+        tokens'' "OFFSET" try-consume :> ( tokens''' has-offset? )
         has-offset? [
             tokens''' consume-token string>number :> ( tokens'''' offset )
             tokens''''
@@ -208,7 +219,7 @@ ERROR: fdql-parse-error message position ;
 ! ============================================================
 
 :: parse-insert ( tokens -- tokens' ast )
-    "INTO" tokens expect-token parse-collection-name :> ( tokens' collection )
+    tokens "INTO" expect-token parse-collection-name :> ( tokens' collection )
     ! Parse document body (simplified - just consume JSON)
     tokens' consume-token drop :> tokens''  ! consume {
     H{ } clone :> doc
@@ -222,33 +233,35 @@ ERROR: fdql-parse-error message position ;
     collection doc prov fdql-insert boa ;
 
 : parse-select ( tokens -- tokens' ast )
-    ! Simplified: just parse "SELECT fields FROM collection"
-    ! Parse field list - returns ( tokens' fields )
+    ! Parse "SELECT fields FROM collection" (simplified)
+    ! Stack discipline: always keep tokens on top until the end
+
+    ! Parse field list
     dup peek-token "*" = [
-        consume-token drop { "*" }
+        consume-token drop { "*" }  ! ( tokens' { "*" } )
     ] [
-        parse-field-list
+        parse-field-list            ! ( tokens' fields )
     ] if
-    swap  ! ( fields tokens' )
+    ! Stack: ( tokens' fields )
 
-    ! FROM collection - returns ( fields tokens'' collection )
-    "FROM" expect-token
-    parse-collection-name  ! ( fields tokens'' collection )
+    ! FROM collection
+    swap                            ! ( fields tokens' )
+    "FROM" expect-token             ! ( fields tokens'' )
+    parse-collection-name           ! ( fields tokens'' collection )
 
-    ! Skip optional clauses for now - just use defaults
-    ! fdql-select needs: fields collection where-clause edge-clause limit-clause with-provenance?
-    f f f f  ! ( fields tokens'' collection f f f f )
+    ! Build the fdql-select tuple with defaults for optional clauses
+    ! fdql-select needs: ( fields collection where edge lim prov )
+    ! Stack has: ( fields tokens'' collection )
 
-    ! Rearrange: need ( tokens'' fields collection where edge lim prov )
-    ! Have: ( fields tokens'' collection f f f f )
-    ! fields is deepest, tokens'' is second, collection third, then 4 f's
-    [ [ [ [ [ 5 nrot ] dip ] dip ] dip ] dip ] dip  ! move tokens'' to bottom
-    ! Now: ( tokens'' fields collection f f f f )
-    fdql-select boa ;
+    rot                             ! ( tokens'' collection fields )
+    swap                            ! ( tokens'' fields collection )
+    f f f f                         ! ( tokens'' fields collection f f f f )
+    fdql-select boa                 ! ( tokens'' ast )
+    ;
 
 :: parse-update ( tokens -- tokens' ast )
     tokens parse-collection-name :> ( tokens' collection )
-    "SET" tokens' expect-token :> tokens''
+    tokens' "SET" expect-token :> tokens''
     ! Parse assignments (simplified)
     V{ } clone :> assignments
     tokens'' [ dup peek-token "WHERE" = not ] [
@@ -264,14 +277,14 @@ ERROR: fdql-parse-error message position ;
     collection assignments >array where prov fdql-update boa ;
 
 :: parse-delete ( tokens -- tokens' ast )
-    "FROM" tokens expect-token parse-collection-name :> ( tokens' collection )
+    tokens "FROM" expect-token parse-collection-name :> ( tokens' collection )
     tokens' parse-where-clause :> ( tokens'' where )
     tokens'' parse-provenance-clause :> ( final-tokens prov )
     final-tokens
     collection where prov fdql-delete boa ;
 
 :: parse-create ( tokens -- tokens' ast )
-    "COLLECTION" tokens expect-token parse-collection-name :> ( tokens' collection )
+    tokens "COLLECTION" expect-token parse-collection-name :> ( tokens' collection )
     ! Parse optional field definitions
     tokens' peek-token "(" = [
         tokens' consume-token drop :> tokens''  ! consume (
@@ -288,9 +301,9 @@ ERROR: fdql-parse-error message position ;
         tokens' { }
     ] if :> ( tokens''''' fields )
     ! Parse optional schema
-    "WITH" tokens''''' try-consume :> ( tokens'''''' has-schema? )
+    tokens''''' "WITH" try-consume :> ( tokens'''''' has-schema? )
     has-schema? [
-        "SCHEMA" tokens'''''' expect-token :> tokens'''''''
+        tokens'''''' "SCHEMA" expect-token :> tokens'''''''
         tokens'''''''
         collection fields H{ } clone fdql-create boa  ! placeholder schema
     ] [
@@ -299,7 +312,7 @@ ERROR: fdql-parse-error message position ;
     ] if ;
 
 :: parse-drop ( tokens -- tokens' ast )
-    "COLLECTION" tokens expect-token parse-collection-name :> ( tokens' collection )
+    tokens "COLLECTION" expect-token parse-collection-name :> ( tokens' collection )
     tokens' parse-provenance-clause :> ( final-tokens prov )
     final-tokens
     collection prov fdql-drop boa ;
@@ -308,7 +321,7 @@ ERROR: fdql-parse-error message position ;
     tokens consume-token :> ( tokens' target-raw )
     target-raw >upper :> target
     target "JOURNAL" = [
-        "SINCE" tokens' try-consume :> ( tokens'' has-since? )
+        tokens' "SINCE" try-consume :> ( tokens'' has-since? )
         has-since? [
             tokens'' consume-token string>number :> ( tokens''' since-val )
             tokens''' target since-val
