@@ -10,13 +10,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Comprehensive QUICKSTART.adoc tutorial (15-minute guide with full examples)
 - Complete VERSIONING.adoc stability policy document
-- Placeholder documentation for planned features:
-  - `docs/DEPLOYMENT.adoc` - Production deployment guide
-  - `docs/SECURITY-AUTH.adoc` - Authentication and security hardening
-  - `docs/API-REFERENCE.adoc` - Programmatic interface reference
-  - `docs/MIGRATION-FROM-RDBMS.adoc` - PostgreSQL/MySQL migration guide
-  - `docs/OBSERVABILITY.adoc` - Logging, metrics, tracing
-  - `docs/INTEGRATION-PATTERNS.adoc` - Message queues, search, analytics
+- Complete documentation suite in `docs/`:
+  - `docs/DEPLOYMENT.adoc` - Production deployment guide (Docker, Kubernetes, systemd)
+  - `docs/SECURITY-AUTH.adoc` - Authentication, authorization, and security hardening
+  - `docs/API-REFERENCE.adoc` - Complete programmatic interface reference (Form.Bridge FFI, FQL API)
+  - `docs/MIGRATION-FROM-RDBMS.adoc` - PostgreSQL/MySQL/SQLite migration guide with type mappings
+  - `docs/OBSERVABILITY.adoc` - Logging, Prometheus metrics, OpenTelemetry tracing, Grafana dashboards
+  - `docs/INTEGRATION-PATTERNS.adoc` - Message queues, search engines, analytics, AI/ML pipelines
 
 ### Changed
 - License updated from MPL-2.0 to Palimpsest-MPL 1.0 (PMPL-1.0)
