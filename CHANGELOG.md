@@ -9,6 +9,54 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0] - 2026-01-12
+
+Distributed Mode milestone: **M17 Complete**
+
+This release adds distributed computing capabilities to FormDB.
+
+### Added
+
+#### Cluster Coordination (`distributed/src/FormDB_Distributed_Cluster.res`)
+- Node discovery and membership management
+- Node status tracking (Starting, Joining, Active, Leaving, Down)
+- Node roles (Leader, Follower, Candidate)
+- Cluster state versioning
+- JSON serialization for cluster state
+
+#### Raft Consensus (`distributed/src/FormDB_Distributed_Consensus.res`)
+- Leader election with term tracking
+- Log replication with entry types (Command, Configuration, NoOp)
+- Vote request/response handling
+- Append entries request/response handling
+- Election timeout detection
+
+#### Data Sharding (`distributed/src/FormDB_Distributed_Sharding.res`)
+- Consistent hashing with virtual nodes
+- Multiple sharding strategies (Hash, Range, Directory)
+- Shard status tracking (Initializing, Active, Migrating, Inactive)
+- Node-to-shard mapping
+- Shard statistics
+
+#### Data Replication (`distributed/src/FormDB_Distributed_Replication.res`)
+- Configurable consistency levels (One, Quorum, All, LocalQuorum)
+- Replication modes (Synchronous, Asynchronous, SemiSync)
+- Replication event queue
+- Replica status tracking
+- Lag statistics
+
+#### Documentation
+- `distributed/README.md` - Comprehensive distributed mode documentation
+- Deployment patterns (single region, multi-region)
+- Best practices for cluster sizing and consistency tuning
+
+### Changed
+
+- STATE.scm updated to M17 100% completion
+- Added distributed module to working-features
+
+---
+
 ## [1.0.0] - 2026-01-12
 
 **FormDB 1.0.0 - First Production Release**
@@ -762,6 +810,7 @@ Initial release: **Repository Initialization**
 
 | Version | Date | Milestone | Key Features |
 |---------|------|-----------|--------------|
+| 1.1.0 | 2026-01-12 | M17 Complete | Cluster, consensus, sharding, replication |
 | 1.0.0 | 2026-01-12 | **Production** | First stable release, all M1-M16 complete |
 | 0.0.10 | 2026-01-12 | M16 Complete | Config validation, health checks, graceful shutdown, readiness |
 | 0.0.9 | 2026-01-12 | M15 Complete | Query cache, connection pool, batch ops, metrics |
@@ -792,7 +841,8 @@ FormDB is in pre-1.0 development. APIs, formats, and interfaces may change witho
 
 ## Links
 
-[Unreleased]: https://github.com/hyperpolymath/formdb/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/hyperpolymath/formdb/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/hyperpolymath/formdb/compare/v1.0.0...v1.1.0
 [1.0.0]: https://github.com/hyperpolymath/formdb/compare/v0.0.10...v1.0.0
 [0.0.10]: https://github.com/hyperpolymath/formdb/compare/v0.0.9...v0.0.10
 [0.0.9]: https://github.com/hyperpolymath/formdb/compare/v0.0.8...v0.0.9
